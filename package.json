@@ -1,15 +1,28 @@
 {
-    "name": "@redblobgames/mapgen4",
-    "version": "2.0.0",
-    "private": true,
-    "type": "module",
-    "dependencies": {
-        "@redblobgames/prng": "https://github.com/redblobgames/prng",
-        "delaunator": "^5",
-        "fast-2d-poisson-disk-sampling": "^1",
-        "flatqueue": "^2",
-        "gl-matrix": "^3",
-        "regl": "^1",
-        "simplex-noise": "^4"
-    }
+  "name": "@redblobgames/mapgen4",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:prep": "shx mkdir -p build",
+    "build:points": "esbuild --bundle generate-points-file.ts --platform=node --format=esm --external:fs --outfile=build/_generate-points-file.js",
+    "build:runpoints": "node build/_generate-points-file.js",
+    "build:bundle": "esbuild --analyze --bundle mapgen4.ts --minify --sourcemap --outfile=build/_bundle.js",
+    "build:worker": "esbuild --bundle worker.ts --sourcemap --minify --outfile=build/_worker.js",
+    "build": "npm run build:prep && npm run build:points && npm run build:runpoints && npm run build:bundle && npm run build:worker",
+    "start": "python -m http.server 8000"
+  },
+  "dependencies": {
+    "@redblobgames/prng": "https://github.com/redblobgames/prng",
+    "delaunator": "^5",
+    "fast-2d-poisson-disk-sampling": "^1",
+    "flatqueue": "^2",
+    "gl-matrix": "^3",
+    "regl": "^1",
+    "simplex-noise": "^4"
+  },
+  "devDependencies": {
+    "esbuild": "^0.23.1",
+    "shx": "^0.3.4"
+  }
 }
